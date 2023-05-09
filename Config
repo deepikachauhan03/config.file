@@ -1,0 +1,167 @@
+ControlMaster auto
+ControlPath /tmp/%h_%p_%r
+ControlPersist 1
+ServerAliveInterval 120
+Host *
+  User deepika.chauhan
+  ServerAliveInterval 100
+  UseRoaming no
+Host *.ucloud.int
+  ForwardAgent yes
+Host dev #Miami Dev env DC
+  User deepika.chauhan
+  Hostname jumpbox-dev00.mia.ucloud.int
+  ForwardAgent yes
+Host *.atl.ucloud.int *.tor.ucloud.int *.plas1.ucloud.int *.dlas1.ucloud.int
+  ForwardAgent yes
+  ProxyCommand  ssh -A -q dev nc -q0 %h 22
+Host staging
+  HostName staging-jump.mia.ucloud.int
+  ForwardAgent yes
+  IdentityFile ~/.ssh/id_rsa_passphrase
+Host sandbox
+  HostName sandbox-jump.mia.ucloud.int
+  ForwardAgent yes
+  IdentityFile ~/.ssh/id_rsa_passphrase
+Host dev
+  Hostname jumpbox-dev00.mia.ucloud.int
+  IdentityFile ~/.ssh/id_rsa_passphrase
+  ForwardAgent yes
+Host patl
+  User deepika.chauhan
+  Hostname jumpbox-atl200.atl.ucloud.int
+  ForwardAgent yes
+  IdentityFile ~/.ssh/id_rsa_passphrase
+  ProxyCommand ssh -A -q dev nc -q0 %h 22
+Host ptor
+  User deepika.chauhan
+  Hostname jumpbox-tor200.tor.ucloud.int
+  ForwardAgent yes
+  IdentityFile ~/.ssh/id_rsa_passphrase
+  ProxyCommand ssh -A -q dev nc -q0 %h 22
+Host plas1
+  User deepika.chauhan
+  Hostname jumpbox-plas100.plas1.ucloud.int
+  ForwardAgent yes
+  ProxyCommand ssh -A -q dev -W %h:%p
+  IdentityFile ~/.ssh/id_rsa_passphrase
+Host dlas1
+  User deepika.chauhan
+  Hostname jumpbox-dlas100.dlas1.ucloud.int
+  ForwardAgent yes
+  ProxyCommand ssh -A -q dev -W %h:%p
+  IdentityFile ~/.ssh/id_rsa_passphrase
+Host jenkins-dev
+  User ubuntu
+  HostName mml-jenkins.mia.ulti.io
+  IdentityFile ~/.ssh/dev-central-logging.pem
+Host jenkins-atl
+  User ubuntu
+  HostName mml-jenkins.atl.ulti.io
+  IdentityFile ~/.ssh/atl-central-logging.pem
+  ProxyCommand ssh jenkins-dev nc %h %p 2> /dev/null
+Host jenkins-tor
+  User ubuntu
+  HostName mml-jenkins.tor.ulti.io
+  IdentityFile ~/.ssh/tor-central-logging
+  ProxyCommand ssh jenkins-dev nc %h %p 2> /dev/null
+## Servers
+Host *d0*mml*
+  User ubuntu
+  IdentityFile ~/.ssh/dev-central-logging.pem
+  ProxyCommand ssh jenkins-dev nc %h %p 2> /dev/null
+Host *e0*mml*
+  User ubuntu
+  IdentityFile ~/.ssh/atl-central-logging.pem
+  ProxyCommand ssh jenkins-atl nc %h %p 2> /dev/null
+Host *t0*mml*
+  User ubuntu
+  IdentityFile ~/.ssh/tor-central-logging.pem
+  ProxyCommand ssh jenkins-tor nc %h %p 2> /dev/null
+Host mgmt
+  Hostname ucihmgmt101.mia.ucloud.int
+  User ostack
+Host mgmt-atl
+  Hostname ucihmgmt101.atl.ucloud.int
+  User ostack
+  ProxyCommand  ssh -A -q mgmt nc -q0 %h 22
+  ForwardAgent yes
+Host mgmt-tor
+  Hostname ucihmgmt101.tor.ucloud.int
+  User ostack
+  ProxyCommand  ssh -A -q mgmt nc -q0 %h 22
+  ForwardAgent yes
+Host mgmt-dlas1
+  User ostack
+  HostName ucjump.dlas1.ucloud.int
+  ProxyCommand  ssh -A -q dev nc -q0 %h 22
+Host mgmt-plas1
+  User ostack
+  HostName ucjump.plas1.ucloud.int
+  ProxyCommand  ssh -A -q dev nc -q0 %h 22
+Host keyserver-mia
+  User ubuntu
+  IdentityFile ~/.ssh/icehouse-miami-controller.pem
+  HostName keyserver.mia.ucloud.int
+Host keyserver-tor
+  User ubuntu
+  IdentityFile ~/.ssh/icehouse-toronto-controller.pem
+  HostName keyserver.tor.ucloud.int
+  ProxyCommand  ssh -A -q dev nc -q0 %h 22
+Host keyserver-alt
+  User ubuntu
+  IdentityFile ~/.ssh/icehouse-atlanta-controller.pem
+  HostName keyserver.atl.ucloud.int
+  ProxyCommand  ssh -A -q dev nc -q0 %h 22
+Host keyserver-plas1
+  User ubuntu
+  IdentityFile ~/.ssh/icehouse-plas1-controller.pem
+  HostName keyserver.plas1.ucloud.int
+  ProxyCommand  ssh -A -q dev nc -q0 %h 22
+Host keyserver-dlas1
+  User ubuntu
+  IdentityFile ~/.ssh/icehouse-dlas1-controller.pem
+  HostName keyserver.dlas1.ucloud.int
+Host dev
+HostName dev-jump.mia.ucloud.int
+ForwardAgent yes
+IdentityFile ~/.ssh/id_rsa_passphrase
+Host atl
+User deepika.chauhan
+HostName jumpbox-atl200.atl.ucloud.int
+ProxyCommand ssh -A -q dev nc -q0 %h 22
+IdentityFile ~/.ssh/id_rsa_passphrase
+Host tor
+User deepika.chauhan
+HostName jumpbox-tor200.tor.ucloud.int
+ProxyCommand ssh -A -q dev nc -q0 %h 22
+IdentityFile ~/.ssh/id_rsa_passphrase
+Host plas1
+Hostname jumpbox-plas100.plas1.ucloud.int
+ForwardAgent yes
+ProxyCommand ssh -A -q dev -W %h:%p
+IdentityFile ~/.ssh/id_rsa_passphrase
+Host gcp-e1
+User deepika.chauhan
+Hostname jumpbox-100.us-east1.prod.gcp.int
+ForwardAgent yes
+ProxyCommand ssh -A -q atl -W %h:%p
+IdentityFile ~/.ssh/id_rsa_passphrase
+Host gcp-ne1
+User deepika.chauhan
+Hostname jumpbox-100.northamerica-northeast1.prod.gcp.int
+ForwardAgent yes
+ProxyCommand ssh -A -q tor -W %h:%p
+IdentityFile ~/.ssh/id_rsa_passphrase
+Host gcp-e4
+User deepika.chauhan
+Hostname jumpbox-100.us-east4.prod.gcp.int
+ForwardAgent yes
+ProxyCommand ssh -A -q atl -W %h:%p
+IdentityFile ~/.ssh/id_rsa_passphrase
+Host gcp-ne2
+User deepika.chauhan
+Hostname jumpbox-100.northamerica-northeast2.prod.gcp.int
+ForwardAgent yes
+ProxyCommAnd ssh -A -q tor -W %h:%p
+IdentityFile ~/.ssh/id_rsa_passphrase
